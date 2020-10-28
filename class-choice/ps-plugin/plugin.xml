@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://plugin.powerschool.pearson.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://plugin.powerschool.pearson.com plugin.xsd"
-        name="Class Choice" version="0.3" description="Collects information for Class Choice section creation script.">
+        name="Class Choice" version="0.4" description="Collects information for Class Choice section creation script.">
   <oauth/>
   <publisher name="Brandon Sorensen">
     <contact email="brandon.sorensen@malad.us"/>
@@ -17,6 +17,7 @@
     <field table="sections" field="TermID" access="ViewOnly"/>
     <field table="sections" field="MaxEnrollment" access="ViewOnly"/>
     <field table="sections" field="Expression" access="ViewOnly"/>
+    <field table="sections" field="Room" access="ViewOnly"/>
     <field table="teachers" field="id" access="ViewOnly"/>
     <field table="teachers" field="First_Name" access="ViewOnly"/>
     <field table="teachers" field="Middle_Name" access="ViewOnly"/>

@@ -8,7 +8,8 @@
 			<column column="SECTIONS.SCHOOLID">SCHOOL_ID</column>
 			<column column="SECTIONS.EXPRESSION">EXPRESSION</column>
 			<column column="SECTIONS.TERMID">TERMID</column>
-			<column column="SECTIONS.MAXENROLLMENT">MAXENROLLMENT</column>
+			<column column="SECTIONS.MAXENROLLMENT">MAX_ENROLLMENT</column>
+			<column column="SECTIONS.ROOM">ROOM</column>
 			<column column="COURSES.COURSE_NAME">COURSE_NAME</column>
 			<column column="COURSES.COURSE_NUMBER">COURSE_NUMBER</column>
 			<column column="TEACHERS.ID">TEACHER_ID</column>
@@ -23,6 +24,7 @@
 					   s.expression,
 					   s.termid,
 					   s.maxenrollment,
+					   s.room,
 					   c.course_name, 
 					   c.course_number, 
 					   t.id,
