@@ -1,0 +1,42 @@
+<queries>
+    <query name="com.classchoice.school.sections" coreTable="" flattened="true">
+        <description>Gets sections in the proper format for class choice.</description>
+        <args>
+        </args>
+        <columns>
+			<column column="SECTIONS.SECTION_NUMBER">SECTION_NUMBER</column>
+			<column column="SECTIONS.SCHOOLID">SCHOOL_ID</column>
+			<column column="SECTIONS.EXPRESSION">EXPRESSION</column>
+			<column column="SECTIONS.TERMID">TERMID</column>
+			<column column="SECTIONS.MAXENROLLMENT">MAXENROLLMENT</column>
+			<column column="COURSES.COURSE_NAME">COURSE_NAME</column>
+			<column column="COURSES.COURSE_NUMBER">COURSE_NUMBER</column>
+			<column column="TEACHERS.ID">TEACHER_ID</column>
+			<column column="TEACHERS.FIRST_NAME">TEACHER_FIRST_NAME</column>
+			<column column="TEACHERS.MIDDLE_NAME">TEACHER_MIDDLE_NAME</column>
+			<column column="TEACHERS.LAST_NAME">TEACHER_LAST_NAME</column>
+ 		</columns>
+        <sql>
+			<![CDATA[
+				SELECT s.section_number,
+					   s.schoolid,
+					   s.expression,
+					   s.termid,
+					   s.maxenrollment,
+					   c.course_name, 
+					   c.course_number, 
+					   t.id,
+					   t.first_name, 
+					   t.middle_name,
+					   t.last_name
+				FROM   sections s 
+					   LEFT JOIN courses c 
+							  ON c.course_number = s.course_number 
+					   LEFT JOIN teachers t 
+							  ON s.teacher = t.id 
+				WHERE  s.schoolid in (615, 616)
+				ORDER BY s.section_number, s.termid
+			]]>
+        </sql>
+    </query>
+</queries>
