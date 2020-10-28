@@ -69,7 +69,7 @@ class PowerQuery(object):
         :return: the JSON object returned by the PowerQuery
         """
         logger = logging.getLogger(__name__)
-        logger.info('Fetching PowerQuery with extension ' + str(self.url_ext))
+        logger.debug('Fetching PowerQuery with extension ' + str(self.url_ext))
         token = get_ps_token()
         header = get_header(token,
                             custom_args={'Content-Type': 'application/json'})
@@ -77,7 +77,7 @@ class PowerQuery(object):
         url = urljoin(os.environ['PS_URL'], self.BASE_QUERY_URL + self.url_ext)
 
         r = requests.post(url, headers=header, params=payload)
-        logger.info('PowerQuery returns with status ' + str(r.status_code))
+        logger.debug('PowerQuery returns with status ' + str(r.status_code))
         try:
             return r.json()['record']
         except KeyError as e:

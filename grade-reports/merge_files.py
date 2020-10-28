@@ -6,7 +6,9 @@ from os import getcwd, PathLike
 from pathlib import Path
 from typing import Optional
 import argparse
+import logging
 import math
+import platform
 
 import numpy as np
 import pandas as pd
@@ -251,25 +253,56 @@ def parse_args() -> argparse.Namespace:
                         help='path to the PowerSchool students file')
     parser.add_argument('-f', '--keep-future', action='store_true',
                         help='exclude classes that start in the future')
+    parser.add_argument('-q', '--silence-output', action='store_true',
+                        help='silence/quiet any console output')
 
     return parser.parse_args()
 
 
 def main():
     args = parse_args()
+
+    logging.basicConfig(level=logging.ERROR if args.silence_output
+                        else logging.INFO)
+
+    logger = logging.getLogger(__name__)
     out_path = Path(args.output_path)
     if out_path.is_dir():
         out_path /= 'grade-reports.csv'
 
     byu = make_byu(args.byu)
+    logger.info(f'Found BYU file at "{args.byu}".')
     apex = make_apex(args.apex, filter_future=not args.keep_future)
+    logger.info(f'Found Apex file at "{args.apex}".')
     idla = make_idla(args.idla, filter_future=not args.keep_future)
+    logger.info(f'Found IDLA file at "{args.idla}".')
     school = make_schoology(args.schoology)
+    logger.info(f'Found Schoology file at "{args.schoology}".')
     students = make_student_list(args.ps_students)
+    logger.info(f'Found PowerSchool student file at "{args.ps_students}".')
 
+    logger.info('Merging and standardizing files.')
     out = merge_sources(byu, apex, idla, school, students)
+
+    unknowns = out[out['student_number'].isnull()]
+    n_unknown = len(unknowns)
+    if n_unknown and not args.silence_output:
+        unknown_path = out_path.parent/'unknown-students.csv'
+        unknown_path = unknown_path.relative_to(getcwd())
+        logger.info(f'{n_unknown} student were not found in student file.'
+                    f' Saving those entries to "{unknown_path}".')
+        (unknowns.drop(columns='student_number')
+         .to_csv(unknown_path, index=False))
+
     out.to_csv(out_path, index=False)
-    print(out.sample(10))
+    logger.info(f'Output file saved to "{out_path.relative_to(getcwd())}".')
+    logger.info('Printing 10 random rows from output as an example:')
+    if not args.silence_output:
+        print(out.sample(10).to_string(index=False))
+
+    if platform.system() == 'Windows':
+        logger.info('Operation completed')
+        input('Press ENTER to exit')
 
 
 if __name__ == '__main__':
