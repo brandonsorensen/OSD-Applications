@@ -1,2 +1,2 @@
 CALL env\Scripts\activate 
-./make_classchoice.py
+make_classchoice.py
