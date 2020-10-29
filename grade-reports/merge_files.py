@@ -93,7 +93,7 @@ def make_apex(path: PathLike, drop_null_course_id: bool = True,
         'course_id', 'course', 'teacher_name',
         'teacher_email', 'student_last', 'student_first',
         'student', 'start_date', 'points_attempted', 'points_possible',
-        'grade', 'overall_grade'
+        'grade_to_date', 'grade'
     ]
 
     apex = (pd.read_csv(path, skiprows=4,
