@@ -12,6 +12,7 @@ defined in the documentation provided by Apex Learning to their
 respective program codes.
 """
 
+import json
 import logging
 import os
 from urllib.parse import urljoin
@@ -47,6 +48,7 @@ class PowerQuery(object):
         PowerQueries.
     """
 
+    PS_URL = 'https://powerschool.sd351.k12.id.us/'
     BASE_QUERY_URL = '/ws/schema/query/com.classchoice.school.'
 
     def __init__(self, url_ext: str, description: str = None):
@@ -74,7 +76,7 @@ class PowerQuery(object):
         header = get_header(token,
                             custom_args={'Content-Type': 'application/json'})
         payload = {'pagesize': page_size}
-        url = urljoin(os.environ['PS_URL'], self.BASE_QUERY_URL + self.url_ext)
+        url = urljoin(self.PS_URL, self.BASE_QUERY_URL + self.url_ext)
 
         r = requests.post(url, headers=header, params=payload)
         logger.debug('PowerQuery returns with status ' + str(r.status_code))
@@ -100,25 +102,22 @@ def get_ps_token() -> str:
 
         - PS_CLIENT_ID: the given client ID for the PowerSchool plugin
         - PS_CLIENT_SECRET: the secret code
-        - PS_URL: the PowerSchool URL
 
     :return: an access token for the PowerSchool server
     """
     header = {
         'Content-Type': "application/x-www-form-urlencoded;charset=UTF-8'"
     }
-    try:
-        client_id = os.environ['PS_CLIENT_ID']
-        client_secret = os.environ['PS_CLIENT_SECRET']
-        url = urljoin(os.environ['PS_URL'], '/oauth/access_token')
-    except ValueError:
+    if not os.path.isfile('powerschool-credentials.json'):
         raise EnvironmentError('PowerSchool credentials are not in the'
                                'environment.')
+    creds = json.load(open('powerschool-credentials.json', 'r'))
+    url = urljoin(PowerQuery.PS_URL, '/oauth/access_token')
 
     payload = {
         'grant_type': 'client_credentials',
-        'client_id': client_id,
-        'client_secret': client_secret
+        'client_id': creds['PS_CLIENT_ID'],
+        'client_secret': creds['PS_CLIENT_SECRET']
     }
 
     r = requests.post(url, headers=header, data=payload)
