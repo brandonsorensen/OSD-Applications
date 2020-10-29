@@ -3,6 +3,7 @@
 import argparse
 import logging
 import os
+import platform
 from pathlib import Path
 from typing import Optional
 
@@ -88,6 +89,15 @@ def main():
     args = parse_args()
     if 0 <= args.term_id < 2601:
         raise ValueError('Term ID cannot be less than 2601.')
+
+    is_windows = platform.system() == 'Windows'
+    if args.term_id < 0 and is_windows:
+        text = ('For which term ID should classes be created? '
+                '(Press ENTER or CTL+C to cancel.)\n>>> ')
+        term_id = int(input(text))
+    else:
+        term_id = args.term_id
+
     output_path = Path(args.output)
     if output_path.is_dir():
         output_path /= 'class-choice.csv'
@@ -98,9 +108,9 @@ def main():
     logger.info('Fetching sections from PowerSchool. '
                 'This may take a few moments.')
 
-    sections = build_df(current_term=args.term_id)
+    sections = build_df(current_term=term_id)
     if not len(sections):
-        raise ValueError(f'No sections found with term ID {args.term_id}.')
+        raise ValueError(f'No sections found with term ID {term_id}.')
     to_copy = (sections[sections['period'].isin(range(1, 5))]
                .copy(deep=True))
     logger.info('Creating new sections for period 7.')
@@ -129,6 +139,10 @@ def main():
     logger.info(f'Printing {n_samples} random entries from output.\n')
     if not args.quiet:
         print(output.sample(n_samples).to_string(index=False))
+
+    if is_windows:
+        logger.info('Operation complete.')
+        input('Press ENTER to exit')
 
 
 if __name__ == '__main__':
