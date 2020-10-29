@@ -12,5 +12,5 @@ then
 	exit 1
 fi
 
-source env/bin/activate
+cd "${0%/*}"
 ./make_classchoice.py -t $term_id
