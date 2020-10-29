@@ -1,7 +1,8 @@
 #!/bin/bash
 
-echo "For which term ID should classes be created?"
+printf "For which term ID should classes be created?\n>>> "
 read term_id
+echo ""
 
 source env/bin/activate
 ./make_classchoice.py -t $term_id
