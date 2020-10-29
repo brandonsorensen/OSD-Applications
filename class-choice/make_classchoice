@@ -1,0 +1,6 @@
+#!/bin/bash
+
+echo "For which term ID should classes be created?"
+read term_id
+
+./make_classchoice.py -t $term_id
