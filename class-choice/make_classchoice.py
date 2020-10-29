@@ -87,9 +87,6 @@ def parse_args() -> argparse.Namespace:
 
 def main():
     args = parse_args()
-    if 0 <= args.term_id < 2601:
-        raise ValueError('Term ID cannot be less than 2601.')
-
     is_windows = platform.system() == 'Windows'
     if args.term_id < 0 and is_windows:
         text = ('For which term ID should classes be created? '
@@ -97,6 +94,9 @@ def main():
         term_id = int(input(text))
     else:
         term_id = args.term_id
+
+    if 0 <= term_id < 2601:
+        raise ValueError('Term ID cannot be less than 2601.')
 
     output_path = Path(args.output)
     if output_path.is_dir():
