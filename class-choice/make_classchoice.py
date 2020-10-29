@@ -91,7 +91,10 @@ def main():
     if args.term_id < 0 and is_windows:
         text = ('For which term ID should classes be created? '
                 '(Press ENTER or CTL+C to cancel.)\n>>> ')
-        term_id = int(input(text))
+        term_id = input(text)
+        if not term_id:
+            return
+        term_id = int(term_id)
     else:
         term_id = args.term_id
 
