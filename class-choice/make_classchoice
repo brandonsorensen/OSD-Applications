@@ -1,8 +1,16 @@
 #!/bin/bash
 
-printf "For which term ID should classes be created?\n>>> "
-read term_id
+timer=30
+
+printf "For which term ID should classes be created? (Press ENTER or CTL+C to cancel.)\n>>> "
+read -t $timer term_id
 echo ""
+
+if [ -z "$term_id" ]
+then 
+	echo "Recieved no response."
+	exit 1
+fi
 
 source env/bin/activate
 ./make_classchoice.py -t $term_id
