@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
+
 import argparse
 import logging
+import os
+from pathlib import Path
 from typing import Optional
 
 import pandas as pd
@@ -57,6 +60,7 @@ def build_df(current_term: int = -1) -> pd.DataFrame:
     sections = (sections[(sections['termid'] == current_term)
                          & (sections['school_id'] == 616)]
                 .reset_index(drop=True))
+    logger.info(f'Keeping only sections for term ID "{current_term}".')
     return to_categories(sections)[order]
 
 
@@ -68,6 +72,14 @@ def parse_args() -> argparse.Namespace:
                              ' the second most recent term in PowerSchool '
                              'is used. (Do not write this number with a comma'
                              '.)')
+    default = Path(os.getcwd())/'class-choice.csv'
+    rel_default = default.relative_to(os.getcwd())
+
+    parser.add_argument('-o', '--output', type=str, nargs=1,
+                        default=default,
+                        help=f'the output path, (default={rel_default})')
+    parser.add_argument('-q', '--quiet', action='store_true',
+                        help='quiet all console output')
 
     return parser.parse_args()
 
@@ -76,7 +88,12 @@ def main():
     args = parse_args()
     if 0 <= args.term_id < 2601:
         raise ValueError('Term ID cannot be less than 2601.')
+    output_path = Path(args.output)
+    if output_path.is_dir():
+        output_path /= 'class-choice.csv'
 
+    level = logging.ERROR if args.quiet else logging.INFO
+    logging.basicConfig(level=level, format='%(message)s')
     logger = logging.getLogger(__name__)
     logger.info('Fetching sections from PowerSchool. '
                 'This may take a few moments.')
@@ -86,22 +103,33 @@ def main():
         raise ValueError(f'No sections found with term ID {args.term_id}.')
     to_copy = (sections[sections['period'].isin(range(1, 5))]
                .copy(deep=True))
+    logger.info('Creating new sections for period 7.')
     to_copy['period'] = 7
     to_copy['expression'] = '7' + to_copy['expression'].str[1:]
+    n_new = to_copy.drop_duplicates().shape[0]
+    logger.info(f'Created {n_new} new sections.')
+    logger.info('Merging with original sections.')
     sections = (pd.concat([sections, to_copy])
                 .drop_duplicates())
+    logger.info(f'Output contains {sections.shape[0]} total sections.')
     out_cols = [
         'course_number', 'course_name', 'section_number',
         'teacher_id', 'teacher_name', 'room', 'expression',
         'termid', 'max_enrollment', 'school_id'
     ]
 
-    (sections[out_cols]
-     .sort_values(by=['course_number', 'section_number', 'teacher_id'])
-     .to_csv('class-choice.csv', index=False))
-    print(sections.head())
+    logger.info(f'Saving output to "{output_path.relative_to(os.getcwd())}".')
+    output = (sections[out_cols]
+              .sort_values(by=['course_number',
+                               'section_number',
+                               'teacher_id']))
+    output.to_csv(output_path, index=False)
+
+    n_samples = 10
+    logger.info(f'Printing {n_samples} random entries from output.\n')
+    if not args.quiet:
+        print(output.sample(n_samples).to_string(index=False))
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
     main()
