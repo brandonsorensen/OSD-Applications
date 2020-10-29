@@ -3,4 +3,5 @@
 echo "For which term ID should classes be created?"
 read term_id
 
+source env/bin/activate
 ./make_classchoice.py -t $term_id
