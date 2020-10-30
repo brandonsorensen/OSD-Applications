@@ -255,10 +255,9 @@ def parse_args():
     parser.add_argument('-s', '--schoology', type=str, nargs=1,
                         default=path.join(default, 'schoology.csv'),
                         help='path to the Schoology file')
-    # FIXME: Point to os.getcwd for output path!
     parser.add_argument('-o', '--output-path', type=str, nargs=1,
                         default=getcwd(),
-                        help='path to the PowerSchool students file')
+                        help='where to write the output CSV file')
     parser.add_argument('-f', '--keep-future', action='store_true',
                         help='exclude classes that start in the future')
     parser.add_argument('-q', '--silence-output', action='store_true',

@@ -51,3 +51,13 @@ This command uses Python to install three tools:
 - `pandas` is a package for working with tablular data like that found in CSV and Excel files
 - `xlrd` is a package for reading in Excel files
 - `requests` is used to communicate with get the section data from PowerSchool
+
+#### Notice: No pip
+
+On older versions of macOS, you may get an error stating that `pip` could not be found. `pip` is a program that manages any extra tools that you install for Python. If it is not installed, copy and paste the following command to do so:
+
+`curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python get-pip.py`
+
+This operation downloads a small file called `get-pip.py`. You can delete it now.
+
+With pip installed, re-run the above Python command either by copy and pasting it again or pressing up twice on the keyborard with Terminal in focus.
