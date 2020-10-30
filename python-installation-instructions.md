@@ -1,6 +1,6 @@
 # Installing Python
 
-The following section covers the installation of the Python language interpreter, which is necessary for running Python scripts. Python is one of the most widely used programming languages in the world and even comes pre-installed on some operating systems, such as macOS and most Linux distrobutions. So long as you follow the instructions closely, there is no risk of installing anything malicious on your machine.
+The following section covers the installation of the Python language interpreter, which is necessary for running Python scripts. Python is one of the most widely used programming languages in the world and even comes pre-installed on some operating systems, such as macOS and most Linux distributions. So long as you follow the instructions closely, there is no risk of installing anything malicious on your machine.
 
 If you already have Python, you can skip to the [Installing Dependencies](#installing-dependencies) section.
 
