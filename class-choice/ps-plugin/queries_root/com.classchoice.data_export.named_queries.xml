@@ -41,4 +41,26 @@
 			]]>
         </sql>
     </query>
+    <query name="com.classchoice.school.students" coreTable="" flattened="true">
+		<description>Gets IHLA/IHLAHS students.</description>
+        <args>
+        </args>
+        <columns>
+			<column column="STUDENTS.FIRST_NAME">FIRST_NAME</column>
+			<column column="STUDENTS.LAST_NAME">LAST_NAME</column>
+			<column column="STUDENTS.SCHOOLID">SCHOOL_ID</column>
+			<column column="STUDENTS.STUDENT_NUMBER">STUDENT_NUMBER</column>
+ 		</columns>
+        <sql>
+			<![CDATA[
+				SELECT first_name,
+					   last_name,
+					   schoolid,
+					   student_number
+				FROM   students
+				WHERE  schoolid in (615, 616)
+				ORDER BY student_number
+			]]>
+        </sql>
+	</query>
 </queries>

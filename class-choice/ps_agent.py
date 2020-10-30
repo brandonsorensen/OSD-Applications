@@ -93,6 +93,7 @@ class PowerQuery(object):
 
 
 fetch_sections = PowerQuery('sections')
+fetch_students = PowerQuery('students')
 
 
 def get_ps_token() -> str:
