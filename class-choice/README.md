@@ -72,6 +72,7 @@ At this point, running the script will be rather straightforward. There are a fe
 
 - On Windows, you must double click the `make_classchoice.py` file. If you do not see a file with the `.py` extension, look at the "Type" column in the file explorer. You want the one that says "Python file".
 - On macOS, you want to click the `make_classchoice` file with no extension. This will open a Terminal window.
+- Type the term ID for for the sections you want to create new sections for.
 
 
 
