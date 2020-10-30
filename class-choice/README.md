@@ -12,7 +12,7 @@ This program requires Python. If you have not previously installed Python, you w
 
 2. In the installer, ensure that you check "Add Python to PATH".
 
-   ![Python installer](images/python-installer.png)
+   ![Python installer](../images/python-installer.png)
 
 3. You may wish to uncheck "Install launcher for all users" if yours is a shared computer.
 
@@ -36,7 +36,7 @@ This program requires Python. If you have not previously installed Python, you w
 
 Python comes pre-installed on macOS. It is accessed through the Terminal.app application, which is located in the "Utilities" sub-folder in the "Applications" folder. You can find it quickly by pressing Command ⌘ and the space bar at the same time to bring up Spotlight. Here type "terminal", and you will see it among the results.
 
-![spotlight search](images/spotlight.png)
+![spotlight search](../images/spotlight.png)
 
 Type `python -V` to print the version number.
 
