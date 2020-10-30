@@ -34,11 +34,25 @@ This program requires Python. If you have not previously installed Python, you w
 
 #### macOS
 
-Python comes pre-installed on macOS. It is accessed through the Terminal.app application, which is located in the "Utilities" sub-folder in the "Applications" folder. You can find it quickly by pressing Command ⌘ and the space bar at the same time to bring up Spotlight. Here type "terminal", and you will see it among the results.
+A version of Python (2.7.16) comes pre-installed on macOS. However, it is an old version of Python that is not compatible with this script. We need Python 3.0 or greater. Apple makes installing this version very easy:
 
-![spotlight search](../images/spotlight.png)
+1. Open the Terminal app. This can be done by navigating to `/Applications/Utilities/Terminal.app` or by pressing Command ⌘ and the space bar at the same time to bring up Spotlight. Here type "terminal", and you will see it among the results.
 
-Type `python -V` to print the version number.
+![spotlight search](/Users/Brandon/Library/Mobile Documents/com~apple~CloudDocs/osd-job/scripts/images/spotlight.png)
+
+2. Type `python3` into the console and press enter. A dialog box will appear asking you to install Apple's developer tools. Click the blue install button.
+   ![Developer Tool Dialog](/Users/Brandon/Library/Mobile Documents/com~apple~CloudDocs/osd-job/scripts/images/developer-tools.png)
+   The download is ~150 MB.
+
+3. Once it is finished, copy and paste the following command into the Termainl window:
+
+   `python3 -V`
+
+   It should print the version number of the newly installed Python. For example:
+
+   `Python 3.8.5`
+
+Note: From this point on, anytime you type a command into the Terminal app that includes the word "python", you should write "python3" instead. Otherwise, macOS will try to use the default 2.7 version.
 
 ### PowerSchool Credentials
 
