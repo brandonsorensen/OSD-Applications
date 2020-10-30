@@ -320,4 +320,8 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except Exception as e:
+        if not isinstance(e, KeyboardInterrupt):
+            input(f'Failed with error:\n\n"{e}"\n\nPress ENTER to exit')
