@@ -48,9 +48,9 @@ On top of Python we need a few extra tools, which we can use Python to install. 
 
 This command uses Python to install three tools:
 
-- `pandas` is a package for working with tablular data like that found in CSV and Excel files
+- `pandas` is a package for working with tabular data like that found in CSV and Excel files
 - `xlrd` is a package for reading in Excel files
-- `requests` is used to communicate with get the section data from PowerSchool
+- `requests` is used to communicate across networks to get the section data from PowerSchool
 
 #### Notice: No pip
 
