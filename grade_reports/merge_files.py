@@ -7,6 +7,7 @@ from os import getcwd, path
 import argparse
 import logging
 import platform
+import sys
 
 import numpy as np
 import pandas as pd
@@ -175,14 +176,14 @@ def make_schoology(path):
     return to_categories(school)
 
 
-def make_student_list(path):
-    # type (str) -> pd.DataFrame
-    students = pd.read_csv('student-schools.csv')
-    students.columns = (students.columns.str.replace('STUDENTS.', '')
-                        .str.lower())
+def make_student_list():
+    # type () -> pd.DataFrame
+    students = pd.DataFrame(fetch_students())
+    num_cols = ['student_number', 'school_id']
+    students[num_cols] = students[num_cols].astype('uint')
     students.set_index('student_number', inplace=True)
-    students = (students[students['schoolid'].isin(range(615, 617))]
-                .drop(columns='schoolid')
+    students = (students[students['school_id'].isin(range(615, 617))]
+                .drop(columns='school_id')
                 .sort_index())
     students['last_first'] = (students['last_name'] + ', '
                               + students['first_name'])
@@ -254,9 +255,7 @@ def parse_args():
     parser.add_argument('-s', '--schoology', type=str, nargs=1,
                         default=path.join(default, 'schoology.csv'),
                         help='path to the Schoology file')
-    parser.add_argument('-p', '--ps-students', type=str, nargs=1,
-                        default=path.join(default, 'student-schools.csv'),
-                        help='path to the PowerSchool students file')
+    # FIXME: Point to os.getcwd for output path!
     parser.add_argument('-o', '--output-path', type=str, nargs=1,
                         default=getcwd(),
                         help='path to the PowerSchool students file')
@@ -287,9 +286,9 @@ def main():
     logger.info('Found IDLA file at "{}".'.format(args.idla))
     school = make_schoology(args.schoology)
     logger.info('Found Schoology file at "{}".'.format(args.schoology))
-    students = make_student_list(args.ps_students)
-    logger.info('Found PowerSchool student file at "{}".'
-                .format(args.ps_students))
+    logger.info('Requesting student list from PowerSchool')
+    students = make_student_list()
+    logger.info('Student list retrieved.')
 
     logger.info('Merging and standardizing files.')
     out = merge_sources(byu, apex, idla, school, students)
@@ -320,8 +319,12 @@ def main():
 
 
 if __name__ == '__main__':
+    sys.path.insert(0, '..')
+    from ps_agent import fetch_students
+
     try:
         main()
     except Exception as e:
         if not isinstance(e, KeyboardInterrupt):
-            input(f'Failed with error:\n\n"{e}"\n\nPress ENTER to exit')
+            input('Failed with error:\n\n"{}"\n\nPress ENTER to exit'
+                  .format(e))

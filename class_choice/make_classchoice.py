@@ -4,12 +4,11 @@ import argparse
 import logging
 import os
 import platform
+import sys
 from pathlib import Path
 from typing import Optional
 
 import pandas as pd
-
-from ps_agent import fetch_sections
 
 
 def to_categories(df: pd.DataFrame, thresh: float = 0.25,
@@ -149,6 +148,9 @@ def main():
 
 
 if __name__ == '__main__':
+    sys.path.insert(0, '..')
+    from ps_agent import fetch_sections
+
     try:
         main()
     except Exception as e:

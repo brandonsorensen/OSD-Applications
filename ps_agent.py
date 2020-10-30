@@ -15,7 +15,11 @@ respective program codes.
 import json
 import logging
 import os
-from urllib.parse import urljoin
+import sys
+try:
+    from urllib.parse import urljoin
+except ImportError:
+    from urlparse import urljoin
 
 import requests
 
@@ -51,7 +55,8 @@ class PowerQuery(object):
     PS_URL = 'https://powerschool.sd351.k12.id.us/'
     BASE_QUERY_URL = '/ws/schema/query/com.classchoice.school.'
 
-    def __init__(self, url_ext: str, description: str = None):
+    def __init__(self, url_ext, description=None):
+        # type: (str, str)
         """
         :param str url_ext: the extension that, appended to the `PS_URL`
             environment variable and `BASE_URL` as defined above,
@@ -61,7 +66,8 @@ class PowerQuery(object):
         if description is not None:
             self.__doc__ = description
 
-    def fetch(self, page_size: int = 0) -> dict:
+    def fetch(self, page_size=0):
+        # type: (int) -> dict
         """
         Obtains an access token and calls a PowerQuery at a given url,
         limiting it to `page_size` results.
@@ -87,7 +93,8 @@ class PowerQuery(object):
                 raise PSEmptyQueryException(url)
             raise e
 
-    def __call__(self, page_size=0) -> dict:
+    def __call__(self, page_size=0):
+        # type: (int) -> dict
         """Calls the fetch method."""
         return self.fetch(page_size=page_size)
 
@@ -96,7 +103,8 @@ fetch_sections = PowerQuery('sections')
 fetch_students = PowerQuery('students')
 
 
-def get_ps_token() -> str:
+def get_ps_token():
+    # type: () -> str
     """
     Gets the PowerSchool access token from the PowerSchool server using
     the following environment variables:
@@ -109,10 +117,11 @@ def get_ps_token() -> str:
     header = {
         'Content-Type': "application/x-www-form-urlencoded;charset=UTF-8'"
     }
-    if not os.path.isfile('powerschool-credentials.json'):
-        raise EnvironmentError('PowerSchool credentials are not in the'
+    cred_path = os.path.join(get_script_path(), 'powerschool-credentials.json')
+    if not os.path.isfile(cred_path):
+        raise EnvironmentError('PowerSchool credentials are not in the '
                                'environment.')
-    creds = json.load(open('powerschool-credentials.json', 'r'))
+    creds = json.load(open(cred_path, 'r'))
     url = urljoin(PowerQuery.PS_URL, '/oauth/access_token')
 
     payload = {
@@ -130,9 +139,10 @@ def get_ps_token() -> str:
     return r.json()['access_token']
 
 
-def get_header(token: str, custom_args: dict = None) -> dict:
+def get_header(token, custom_args=None):
+    # type: (str, dict) -> dict
     header = {
-        'Authorization': f'Bearer {token}',
+        'Authorization': 'Bearer {}'.format(token),
         'Accept': 'application/json'
     }
 
@@ -141,7 +151,15 @@ def get_header(token: str, custom_args: dict = None) -> dict:
     return header
 
 
-def flatten_ps_json(json_obj: dict) -> dict:
+def get_script_path():
+    try:
+        return os.path.dirname(os.path.realpath(__file__))
+    except NameError:
+        return os.path.dirname(os.path.realpath(sys.argv[0]))
+
+
+def flatten_ps_json(json_obj):
+    # type: (dict) -> dict
     """Takes the 3D dict returned by PowerSchool and flattens it into 1D."""
     flattened = {}
     for table in json_obj['tables'].values():
@@ -162,7 +180,7 @@ class PSEmptyQueryException(PSException):
         self.url = url
 
     def __str__(self):
-        return f'Query to URL "{self.url}" returned no results.'
+        return 'Query to URL "{}" returned no results.'.format(self.url)
 
 
 class PSNoConnectionError(PSException):
