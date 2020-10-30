@@ -286,7 +286,8 @@ def main():
     logger.info('Found IDLA file at "{}".'.format(args.idla))
     school = make_schoology(args.schoology)
     logger.info('Found Schoology file at "{}".'.format(args.schoology))
-    logger.info('Requesting student list from PowerSchool')
+    logger.info('Requesting student list from PowerSchool. '
+                'This may take a moment.')
     students = make_student_list()
     logger.info('Student list retrieved.')
 
