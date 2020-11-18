@@ -97,9 +97,9 @@ def make_apex(path, drop_null_course_id=True, filter_future=True):
         'grade_to_date', 'grade'
     ]
 
-    apex = (pd.read_csv(path, skiprows=4,
-                        usecols=apex_to_keep)
-            .dropna(how='all', axis=1))
+    apex = (pd.read_csv(path, usecols=apex_to_keep)
+            .dropna(how='all', axis=1)
+            .dropna(how='all', axis=0))
     apex.columns = apex_cols
 
     apex['start_date'] = pd.to_datetime(apex['start_date'])
