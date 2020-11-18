@@ -118,6 +118,7 @@ def main():
     logger.info('Creating new sections for period 7.')
     to_copy['period'] = 7
     to_copy['expression'] = '7' + to_copy['expression'].str[1:]
+    to_copy['section_number'] = 10099
     n_new = to_copy.drop_duplicates().shape[0]
     logger.info(f'Created {n_new} new sections.')
     logger.info('Merging with original sections.')
@@ -133,7 +134,7 @@ def main():
     logger.info(f'Saving output to "{output_path.relative_to(os.getcwd())}".')
     output = (sections[out_cols]
               .sort_values(by=['course_number',
-                               'section_number',
+                               'expression',
                                'teacher_id']))
     output.to_csv(output_path, index=False)
 
