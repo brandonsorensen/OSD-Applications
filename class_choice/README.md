@@ -19,7 +19,14 @@ Running the script is rather straightforward. There are a few steps that differ 
 
      This will open a Terminal window.
 
-- Type the term ID for for the sections you want to create new sections for.
+- Type the term ID or IDs of the sections for which you want to create new sections. If there are multiple IDs, they must be provided in a comma-separated list. See the example below:
+
+  ```
+  For which term ID should classes be created? (Press ENTER or CTL+C to cancel.)
+  >>> 3000,3002,3003
+  ```
+
+  
 
 
 

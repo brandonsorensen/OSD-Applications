@@ -6,7 +6,7 @@ import os
 import platform
 import sys
 from pathlib import Path
-from typing import Optional
+from typing import List, Optional
 
 import pandas as pd
 
@@ -36,7 +36,7 @@ def to_categories(df: pd.DataFrame, thresh: float = 0.25,
         return df
 
 
-def build_df(current_term: int = -1) -> pd.DataFrame:
+def build_df(current_terms: List[int] = None) -> pd.DataFrame:
     logger = logging.getLogger(__name__)
     order = [
         'course_number', 'course_name', 'section_number',
@@ -54,20 +54,22 @@ def build_df(current_term: int = -1) -> pd.DataFrame:
     sections['teacher_name'] = (sections['teacher_last_name'] + ', '
                                 + sections['teacher_first_name'])
     sections[numeric_cols] = sections[numeric_cols].astype('uint16')
-    if current_term < 0:
-        current_term = sections['termid'].nlargest(2).iloc[1]
-        logger.debug(f'No term ID provided. Using term ID {current_term}.')
-    sections = (sections[(sections['termid'] == current_term)
+    if current_terms is None:
+        current_terms = sorted(sections['termid'].unique())[-2:]
+        logger.debug(f'No term ID provided. Using term ID(s) {current_terms}.')
+        breakpoint()
+    sections = (sections[(sections['termid'].isin(current_terms))
                          & (sections['school_id'] == 616)]
                 .reset_index(drop=True))
-    logger.info(f'Keeping only sections for term ID "{current_term}".')
+    logger.info(f'Keeping only sections for term ID(s) '
+                f'"{list(current_terms)}".')
     return to_categories(sections)[order]
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
-    parser.add_argument('-t', '--term-id', type=int, nargs='?',
-                        default=-1,
+    parser.add_argument('-t', '--term-id', type=str, nargs='?',
+                        default=None,
                         help='enter the relevant term ID; if none is provided,'
                              ' the second most recent term in PowerSchool '
                              'is used. (Do not write this number with a comma'
@@ -87,17 +89,19 @@ def parse_args() -> argparse.Namespace:
 def main():
     args = parse_args()
     is_windows = platform.system() == 'Windows'
-    if args.term_id < 0 and is_windows:
-        text = ('For which term ID should classes be created? '
+    term_ids = args.term_id
+    if term_ids is not None:
+        term_ids = [int(term_id.strip()) for term_id in args.term_id.split(',')]
+    elif is_windows: 
+        text = ('For which term ID(s) should classes be created? '
+                'Please supply a comma-separated list. '
                 '(Press ENTER or CTL+C to cancel.)\n>>> ')
-        term_id = input(text)
-        if not term_id:
+        term_ids = input(text)
+        if not term_ids:
             return
-        term_id = int(term_id)
-    else:
-        term_id = args.term_id
+        term_ids = [int(term_id.strip()) for term_id in term_ids.split(',')]
 
-    if 0 <= term_id < 2601:
+    if term_ids and any(map(lambda term_id: term_id < 2601, term_ids)):
         raise ValueError('Term ID cannot be less than 2601.')
 
     output_path = Path(args.output)
@@ -110,9 +114,9 @@ def main():
     logger.info('Fetching sections from PowerSchool. '
                 'This may take a few moments.')
 
-    sections = build_df(current_term=term_id)
+    sections = build_df(current_terms=term_ids)
     if not len(sections):
-        raise ValueError(f'No sections found with term ID {term_id}.')
+        raise ValueError(f'No sections found with term ID {term_ids}.')
     to_copy = (sections[sections['period'].isin(range(1, 5))]
                .copy(deep=True))
     logger.info('Creating new sections for period 7.')
