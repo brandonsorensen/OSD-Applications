@@ -68,13 +68,13 @@
         <args>
         </args>
         <columns>
-			<column column="CC.STUDENTID">ID</column>
-			<column column="CC.COURSE_NUMBER">NUMBER</column>
-			<column column="CC.DATEENROLLED">DATE_ENROLLED</column>
+			<column column="CC.STUDENTID">STUDENTID</column>
+			<column column="CC.COURSE_NUMBER">C0URSE_NUMBER</column>
+			<column column="CC.DATEENROLLED">DATEENROLLED</column>
 			<column column="CC.TERMID">TERMID</column>
-			<column column="COURSES.COURSE_NAME">NAME</column>
+			<column column="COURSES.COURSE_NAME">COURSE_NAME</column>
 			<column column="COURSES.CREDIT_HOURS">CREDIT_HOURS</column>
-			<column column="COURSES.SCHED_COURSESUBJECTAREACODE">SUBJECT_AREA_CODE</column>
+			<column column="COURSES.SCHED_COURSESUBJECTAREACODE">SCHED_COURSESUBJECTAREACODE</column>
 			<column column="STUDENTS.GRADE_LEVEL">GRADE_LEVEL</column>
  		</columns>
         <sql>
