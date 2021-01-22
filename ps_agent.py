@@ -101,6 +101,7 @@ class PowerQuery(object):
 
 fetch_sections = PowerQuery('sections')
 fetch_students = PowerQuery('students')
+fetch_all_courses = PowerQuery('current_courses')
 
 
 def get_ps_token():
