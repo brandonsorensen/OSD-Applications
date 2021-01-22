@@ -63,4 +63,36 @@
 			]]>
         </sql>
 	</query>
+    <query name="com.classchoice.school.current_courses" coreTable="" flattened="true">
+		<description>Gets current year student courses.</description>
+        <args>
+        </args>
+        <columns>
+			<column column="CC.STUDENTID">ID</column>
+			<column column="CC.COURSE_NUMBER">NUMBER</column>
+			<column column="CC.DATEENROLLED">DATE_ENROLLED</column>
+			<column column="CC.TERMID">TERMID</column>
+			<column column="COURSES.COURSE_NAME">NAME</column>
+			<column column="COURSES.CREDIT_HOURS">CREDIT_HOURS</column>
+			<column column="COURSES.SCHED_COURSESUBJECTAREACODE">SUBJECT_AREA_CODE</column>
+			<column column="STUDENTS.GRADE_LEVEL">GRADE_LEVEL</column>
+ 		</columns>
+        <sql>
+			<![CDATA[
+				SELECT cc.studentid,
+					   cc.course_number,
+					   cc.dateenrolled,
+					   cc.termid,
+					   courses.course_name,
+					   courses.credit_hours,
+					   courses.sched_coursesubjectareacode,
+					   students.grade_level
+				FROM   cc,
+					   courses,
+					   students
+				WHERE  cc.course_number = courses.course_number
+					   AND cc.studentid = students.id
+			]]>
+        </sql>
+	</query>
 </queries>

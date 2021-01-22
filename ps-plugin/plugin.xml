@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://plugin.powerschool.pearson.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://plugin.powerschool.pearson.com plugin.xsd"
-        name="Class Choice" version="0.8" description="Collects information for Class Choice section creation script.">
+        name="Class Choice" version="0.97" description="Collects information for Class Choice section creation script.">
   <oauth/>
   <publisher name="Brandon Sorensen">
     <contact email="brandon.sorensen@malad.us"/>
   </publisher>
   <access_request>
+    <field table="cc" field="course_number" access="ViewOnly"/>
+    <field table="cc" field="dateenrolled" access="ViewOnly"/>
+    <field table="cc" field="studentid" access="ViewOnly"/>
+    <field table="cc" field="termid" access="ViewOnly"/>
     <field table="courses" field="course_number" access="ViewOnly"/>
     <field table="courses" field="course_name" access="ViewOnly"/>
+    <field table="courses" field="credit_hours" access="ViewOnly"/>
+    <field table="courses" field="sched_coursesubjectareacode" access="ViewOnly"/>
+    <field table="courses" field="sched_department" access="ViewOnly"/>
     <field table="sections" field="SchoolID" access="ViewOnly"/>
     <field table="sections" field="ID" access="ViewOnly"/>
     <field table="sections" field="Teacher" access="ViewOnly"/>
@@ -23,7 +30,9 @@
     <field table="teachers" field="Middle_Name" access="ViewOnly"/>
     <field table="teachers" field="Last_Name" access="ViewOnly"/>
     <field table="students" field="First_Name" access="ViewOnly"/>
+    <field table="students" field="ID" access="ViewOnly"/>
     <field table="students" field="Last_Name" access="ViewOnly"/>
+    <field table="students" field="Grade_Level" access="ViewOnly"/>
     <field table="students" field="SchoolID" access="ViewOnly"/>
     <field table="students" field="Student_Number" access="ViewOnly"/>
   </access_request>
