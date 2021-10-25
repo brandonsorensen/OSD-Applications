@@ -57,7 +57,6 @@ def build_df(current_terms: List[int] = None) -> pd.DataFrame:
     if current_terms is None:
         current_terms = sorted(sections['termid'].unique())[-2:]
         logger.debug(f'No term ID provided. Using term ID(s) {current_terms}.')
-        breakpoint()
     sections = (sections[(sections['termid'].isin(current_terms))
                          & (sections['school_id'] == 616)]
                 .reset_index(drop=True))
@@ -82,6 +81,8 @@ def parse_args() -> argparse.Namespace:
                         help=f'the output path, (default={rel_default})')
     parser.add_argument('-q', '--quiet', action='store_true',
                         help='quiet all console output')
+    parser.add_argument('-s', '--class-size', type=int, nargs=1,
+                        help='Change all class sizes to given number.')
 
     return parser.parse_args()
 
@@ -128,6 +129,12 @@ def main():
     logger.info('Merging with original sections.')
     sections = (pd.concat([sections, to_copy])
                 .drop_duplicates())
+
+    if args.class_size:
+        logger.info(f'Setting class size to {args.class_size}.')
+        sections['max_enrollment'] = args.class_size[0]
+        sections.drop_duplicates(inplace=True)
+
     logger.info(f'Output contains {sections.shape[0]} total sections.')
     out_cols = [
         'course_number', 'course_name', 'section_number',
